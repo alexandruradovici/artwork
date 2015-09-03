@@ -1,7 +1,7 @@
 $(document).ready (function ()
 {
 	var audio = null;
-	var playing = null;
+	var playing = 0;
 	var language = "ro";
 
 	function normalButtons ()
@@ -49,22 +49,29 @@ $(document).ready (function ()
 		{
 			var value = $(this).data ('value');
 			playedButton (playing);
-			playing = value;
-			selectButton (value);
 			if (audio)
 			{
 				audio.pause ();
 				audio.src = '';
 			}
-			audio = new Audio('mp3/'+value+language+'.mp3');
-			audio.play();
-			(function (item)
+			if (playing!=value)
 			{
-				audio.addEventListener('ended', function ()
+				playing = value;
+				selectButton (value);
+				audio = new Audio('mp3/'+value+language+'.mp3');
+				audio.play();
+				(function (item)
 				{
-					playedButton (item);
-				});
-			})(playing);
+					audio.addEventListener('ended', function ()
+					{
+						playedButton (item);
+					});
+				})(playing);
+			}
+			else
+			{
+				playing = 0;
+			}
 		});
 
 		$(document).on ('click', '.language', function (e)
