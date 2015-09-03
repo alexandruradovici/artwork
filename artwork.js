@@ -58,6 +58,13 @@ $(document).ready (function ()
 			}
 			audio = new Audio('mp3/'+value+language+'.mp3');
 			audio.play();
+			(function (item)
+			{
+				audio.addEventListener('ended', function ()
+				{
+					playedButton (item);
+				});
+			})(playing);
 		});
 
 		$(document).on ('click', '.language', function (e)
